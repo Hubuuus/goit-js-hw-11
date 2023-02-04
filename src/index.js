@@ -60,21 +60,7 @@ const getImg = async (value, page) => {
     data.forEach(img => {
       displayImgEl(img);
     });
-    if (pageScroll === 1) {
-      console.log('Hooray!');
-      console.log(response.data.hits.length);
-      lightbox.refresh();
-      Notify.success(`Hooray! We found ${response.data.totalHits} images.`);
-    } else if (response.data.hits.length == 0) {
-      console.log('Sorry!');
-      loadMore.style.display = 'none';
-      Notify.failure(
-        "We're sorry, but you've reached the end of search results."
-      );
-    } else {
-      console.log(response.data.hits.length);
-      lightbox.refresh();
-    }
+   
     const { height: cardHeight } = document
       .querySelector('.gallery')
       .firstElementChild.getBoundingClientRect();
@@ -83,7 +69,24 @@ const getImg = async (value, page) => {
       top: cardHeight * 0.5,
       behavior: 'smooth',
     });
+    if (pageScroll === 1) {
+        console.log('Hooray!');
+        console.log(response.data.hits.length);
+        loadMore.style.display = 'flex';
+        lightbox.refresh();
+        Notify.success(`Hooray! We found ${response.data.totalHits} images.`);
+      } else if (response.data.hits.length == 0) {
+        console.log('Sorry!');
+        loadMore.style.display = 'none';
+        Notify.failure(
+          "We're sorry, but you've reached the end of search results."
+        );
+      } else {
+        console.log(response.data.hits.length);
+        lightbox.refresh();
+      }
   } catch (error) {
+    loadMore.style.display = 'none';
     Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
@@ -94,7 +97,6 @@ let pageScroll = 1;
 
 searchSubmit.addEventListener('submit', event => {
   event.preventDefault();
-  loadMore.style.display = 'flex';
   gallery.innerHTML = '';
   if (searchInput.value == '') {
     return;
