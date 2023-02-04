@@ -76,3 +76,32 @@ img {
     }
   }
 }
+
+.load-more {
+  background-color: rgb(204, 204, 204);
+  color: rgb(51, 49, 184);
+  width: 200px;
+  height: 50px;
+  border: none;
+  border-radius: 20px;
+  margin-block: 20px;
+  animation: 300ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.load-more:hover {
+  outline: #020202 2px solid;
+  cursor: pointer;
+}
+
+.boxButton {
+  background-color: rgb(51, 49, 184);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  width: 100vw;
+  bottom: 0px;
+}

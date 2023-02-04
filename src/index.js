@@ -1,4 +1,3 @@
-
 const axios = require('axios').default;
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
@@ -7,14 +6,17 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const searchInput = document.querySelector('.search-form__input');
 const searchSubmit = document.querySelector('.search-form');
+const loadMore = document.querySelector('.load-more');
 const gallery = document.querySelector('.gallery');
+
+loadMore.style.display = 'none';
 
 let parameters = {
   key: '33342226-bbc62fd28fd26f410ebf6a75c',
   image_type: 'image',
   orientation: 'horizontal',
   safesearch: true,
-  per_page: 25,
+  per_page: 40,
 };
 
 var lightbox = new SimpleLightbox('.gallery a');
@@ -58,9 +60,21 @@ const getImg = async (value, page) => {
     data.forEach(img => {
       displayImgEl(img);
     });
-    lightbox.refresh();
-    Notify.success(`Hooray! We found ${response.data.totalHits} images.`);
-
+    if (pageScroll === 1) {
+      console.log('Hooray!');
+      console.log(response.data.hits.length);
+      lightbox.refresh();
+      Notify.success(`Hooray! We found ${response.data.totalHits} images.`);
+    } else if (response.data.hits.length == 0) {
+      console.log('Sorry!');
+      loadMore.style.display = 'none';
+      Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
+    } else {
+      console.log(response.data.hits.length);
+      lightbox.refresh();
+    }
     const { height: cardHeight } = document
       .querySelector('.gallery')
       .firstElementChild.getBoundingClientRect();
@@ -76,9 +90,12 @@ const getImg = async (value, page) => {
   }
 };
 
+let pageScroll = 1;
+
 searchSubmit.addEventListener('submit', event => {
-  gallery.innerHTML = '';
   event.preventDefault();
+  loadMore.style.display = 'flex';
+  gallery.innerHTML = '';
   if (searchInput.value == '') {
     return;
   } else {
@@ -87,14 +104,17 @@ searchSubmit.addEventListener('submit', event => {
   }
 });
 
-let pageScroll = 1;
+// window.addEventListener('scroll', () => {
+//   if (
+//     window.scrollY + window.innerHeight >=
+//     document.documentElement.scrollHeight
+//   ) {
+//     pageScroll++;
+//     getImg(searchInput.value.trim(), pageScroll);
+//   }
+// });
 
-window.addEventListener('scroll', () => {
-  if (
-    window.scrollY + window.innerHeight >=
-    document.documentElement.scrollHeight
-  ) {
-    pageScroll++;
-    getImg(searchInput.value.trim(), pageScroll);
-  }
+loadMore.addEventListener('click', () => {
+  pageScroll++;
+  getImg(searchInput.value.trim(), pageScroll);
 });
