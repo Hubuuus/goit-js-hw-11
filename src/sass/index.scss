@@ -83,16 +83,17 @@ img {
   width: 200px;
   height: 50px;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   margin-block: 20px;
-  animation: 300ms;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: 500;
+  font-size: large;
 }
 
 .load-more:hover {
-  outline: #020202 2px solid;
+  outline: rgb(204, 204, 204) 2px solid;
   cursor: pointer;
 }
 
